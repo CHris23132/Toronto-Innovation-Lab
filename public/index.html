@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Toronto Innovation Lab</title>
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/12.3.0/firebase-app-compat.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/12.3.0/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/12.3.0/firebase-database-compat.js"></script>
+    <script defer src="/__/firebase/12.3.0/firebase-firestore-compat.js"></script>
+    <script defer src="/__/firebase/12.3.0/firebase-functions-compat.js"></script>
+    <script defer src="/__/firebase/12.3.0/firebase-messaging-compat.js"></script>
+    <script defer src="/__/firebase/12.3.0/firebase-storage-compat.js"></script>
+    <script defer src="/__/firebase/12.3.0/firebase-analytics-compat.js"></script>
+    <script defer src="/__/firebase/12.3.0/firebase-remote-config-compat.js"></script>
+    <script defer src="/__/firebase/12.3.0/firebase-performance-compat.js"></script>
+    <!-- 
+      initialize the SDK after all desired features are loaded, set useEmulator to false
+      to avoid connecting the SDK to running emulators.
+    -->
+    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+
+    <style media="screen">
+      @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+      
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body { 
+        background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
+        color: #1a1a1a; 
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        margin: 0; 
+        padding: 0; 
+        line-height: 1.5;
+        font-weight: 400;
+      }
+      
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 60px 40px;
+      }
+      
+      .header {
+        text-align: center;
+        margin-bottom: 80px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .header-cta-button {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+        color: #ffffff;
+        padding: 8px 24px;
+        border: none;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        cursor: pointer;
+        font-family: 'JetBrains Mono', monospace;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+        position: relative;
+        overflow: hidden;
+        margin-top: 20px;
+      }
+      
+      .header-cta-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+        transition: left 0.5s ease;
+      }
+      
+      .header-cta-button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+        background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
+      }
+      
+      .header-cta-button:hover::before {
+        left: 100%;
+      }
+      
+      .header-cta-button:active {
+        transform: translateY(0);
+      }
+      
+      .main-title {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 52px;
+        font-weight: 700;
+        margin-bottom: 40px;
+        letter-spacing: 3px;
+        background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      
+      .nav-links {
+        display: flex;
+        justify-content: center;
+        gap: 60px;
+        margin-bottom: 50px;
+        padding: 20px 0;
+      }
+      
+      .nav-link {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 14px;
+        text-decoration: none;
+        color: #2a2a2a;
+        font-weight: 500;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        position: relative;
+        transition: all 0.3s ease;
+        padding: 8px 16px;
+        border-radius: 4px;
+      }
+      
+      .nav-link:hover {
+        color: #000;
+        background: rgba(0,0,0,0.05);
+        transform: translateY(-1px);
+      }
+      
+      .nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #000, #666);
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+      }
+      
+      .nav-link:hover::after {
+        width: 100%;
+      }
+      
+      .header-separator {
+        width: 100%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent 0%, #ddd 20%, #999 50%, #ddd 80%, transparent 100%);
+        margin: 40px 0 60px;
+      }
+      
+      .content-section {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 80px;
+        padding: 60px 0;
+        border-bottom: 1px solid rgba(0,0,0,0.08);
+        position: relative;
+      }
+      
+      .content-section:last-of-type {
+        border-bottom: none;
+      }
+      
+      .content-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.1) 50%, transparent 100%);
+      }
+      
+      .section-image {
+        width: 320px;
+        height: 320px;
+        object-fit: contain;
+        flex-shrink: 0;
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background: #fafafa;
+        padding: 20px;
+      }
+      
+      .section-image:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 16px 48px rgba(0,0,0,0.12);
+      }
+      
+      .section-text {
+        flex: 1;
+        padding: 0 60px;
+        font-size: 20px;
+        line-height: 1.7;
+        font-weight: 500;
+        letter-spacing: 0.3px;
+        color: #2a2a2a;
+        position: relative;
+      }
+      
+      .section-text::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 3px;
+        height: 100%;
+        background: linear-gradient(180deg, #000 0%, #666 50%, #000 100%);
+        border-radius: 2px;
+      }
+      
+      .section-text.left {
+        text-align: left;
+        padding-left: 60px;
+        padding-right: 0;
+      }
+      
+      .section-text.right {
+        text-align: left;
+        padding-right: 60px;
+        padding-left: 0;
+      }
+      
+      .section-text.right::before {
+        left: auto;
+        right: 0;
+      }
+      
+      .section-subtitle {
+        font-size: 16px;
+        line-height: 1.6;
+        font-weight: 400;
+        letter-spacing: 0.2px;
+        color: #666;
+        margin-top: 20px;
+        font-style: italic;
+      }
+      
+      .cta-section {
+        text-align: center;
+        margin-top: 80px;
+        padding: 40px 0;
+      }
+      
+      .cta-button {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+        color: #ffffff;
+        padding: 24px 80px;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        cursor: pointer;
+        font-family: 'JetBrains Mono', monospace;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .cta-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+        transition: left 0.5s ease;
+      }
+      
+      .cta-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+        background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
+      }
+      
+      .cta-button:hover::before {
+        left: 100%;
+      }
+      
+      .cta-button:active {
+        transform: translateY(0);
+      }
+      
+      @media (max-width: 768px) {
+        .container {
+          padding: 40px 20px;
+        }
+        
+        .header-cta-button {
+          padding: 6px 20px;
+          font-size: 11px;
+          margin-top: 15px;
+        }
+        
+        .main-title {
+          font-size: 36px;
+          letter-spacing: 2px;
+        }
+        
+        .nav-links {
+          flex-direction: column;
+          gap: 20px;
+        }
+        
+        .content-section {
+          flex-direction: column;
+          text-align: center;
+          padding: 40px 0;
+        }
+        
+        .section-image {
+          width: 280px;
+          height: 280px;
+          margin: 0 auto 30px;
+        }
+        
+        .section-text {
+          padding: 0;
+          text-align: center;
+          font-size: 18px;
+        }
+        
+        .section-text::before {
+          display: none;
+        }
+        
+        .section-subtitle {
+          font-size: 14px;
+          margin-top: 15px;
+        }
+        
+        .cta-button {
+          padding: 20px 60px;
+          font-size: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header Section -->
+      <div class="header">
+        <h1 class="main-title">TORONTO INNOVATION LAB</h1>
+        <div class="nav-links">
+          <a href="#" class="nav-link">AI TRAINING CONSULTING</a>
+          <a href="#" class="nav-link">CUSTOM DATA LABELLING</a>
+          <a href="#" class="nav-link">CUSTOM MODEL TRAINING</a>
+        </div>
+        <button class="header-cta-button">GET STARTED</button>
+        <div class="header-separator"></div>
+      </div>
+
+      <!-- First Content Section -->
+      <div class="content-section">
+        <img src="images/Image1-man-working.png" alt="Man working on conveyor belt" class="section-image">
+        <div class="section-text right">
+          CREATE YOUR STRATEGY FOR AI IN THE PHYSICAL WORLD REAL WORLD BUSINESS VALUE
+          <div class="section-subtitle">
+            Don't miss the AI wave and don't get left behind your competition with a strategy and plan for training custom AI models
+          </div>
+        </div>
+      </div>
+
+      <!-- Second Content Section -->
+      <div class="content-section">
+        <div class="section-text left">
+          TURN YOUR COMPANY OPERATIONS INTO PROPRIETARY AI MODELS THAT YOU CAN OWN AND CONTROL
+          <div class="section-subtitle">
+            Your company operations and Industry expertise is what sets you apart turn your edge into a proprietary AI model with your operations and expertise
+          </div>
+        </div>
+        <img src="images/image2-Robot-freinds.png" alt="Man and robot shaking hands" class="section-image">
+      </div>
+
+      <!-- Third Content Section -->
+      <div class="content-section">
+        <img src="images/Imag3-factory-ai.png" alt="Robot working on assembly line" class="section-image">
+        <div class="section-text right">
+          OWN THE AI ERA AND TURN INDUSTRY EXPERTISE INTO PROPRIETARY IP
+          <div class="section-subtitle">
+            Don't outsource your critical leverage and rely on third parties for integrating AI create your own proprietary AI models that aid and improve as well as learn from your business operations
+          </div>
+        </div>
+      </div>
+
+      <!-- Call to Action Section -->
+      <div class="cta-section">
+        <button class="cta-button">GET STARTED</button>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Firebase SDK is available here if needed
+        try {
+          let app = firebase.app();
+          console.log('Firebase SDK loaded successfully');
+        } catch (e) {
+          console.error('Error loading Firebase SDK:', e);
+        }
+      });
+    </script>
+  </body>
+</html>
