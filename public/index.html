@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Toronto Innovation Lab</title>
+    <link rel="icon" type="image/png" href="favicon/favicon-logo.png">
+    <link rel="shortcut icon" type="image/png" href="favicon/favicon-logo.png">
 
     <!-- update the version number as needed -->
     <script defer src="/__/firebase/12.3.0/firebase-app-compat.js"></script>
@@ -74,6 +76,8 @@
         position: relative;
         overflow: hidden;
         margin-top: 20px;
+        text-decoration: none;
+        display: inline-block;
       }
       
       .header-cta-button::before {
@@ -99,6 +103,18 @@
       
       .header-cta-button:active {
         transform: translateY(0);
+      }
+      
+      .header-subheading {
+        font-size: 14px;
+        line-height: 1.5;
+        font-weight: 400;
+        letter-spacing: 0.3px;
+        color: #999;
+        margin-top: 25px;
+        text-align: center;
+        max-width: 800px;
+        font-style: italic;
       }
       
       .main-title {
@@ -162,7 +178,7 @@
         width: 100%;
         height: 1px;
         background: linear-gradient(90deg, transparent 0%, #ddd 20%, #999 50%, #ddd 80%, transparent 100%);
-        margin: 40px 0 60px;
+        margin: 40px 0 30px;
       }
       
       .content-section {
@@ -276,6 +292,8 @@
         box-shadow: 0 8px 24px rgba(0,0,0,0.15);
         position: relative;
         overflow: hidden;
+        text-decoration: none;
+        display: inline-block;
       }
       
       .cta-button::before {
@@ -312,6 +330,13 @@
           padding: 6px 20px;
           font-size: 11px;
           margin-top: 15px;
+        }
+        
+        .header-subheading {
+          font-size: 12px;
+          margin-top: 20px;
+          max-width: 100%;
+          padding: 0 20px;
         }
         
         .main-title {
@@ -364,12 +389,15 @@
       <div class="header">
         <h1 class="main-title">TORONTO INNOVATION LAB</h1>
         <div class="nav-links">
-          <a href="#" class="nav-link">AI TRAINING CONSULTING</a>
-          <a href="#" class="nav-link">CUSTOM DATA LABELLING</a>
-          <a href="#" class="nav-link">CUSTOM MODEL TRAINING</a>
+          <a href="AI-training-consulting.html" class="nav-link">AI TRAINING CONSULTING</a>
+          <a href="custom-data-labelling.html" class="nav-link">CUSTOM DATA LABELLING</a>
+          <a href="custom-model-training.html" class="nav-link">CUSTOM MODEL TRAINING</a>
         </div>
-        <button class="header-cta-button">GET STARTED</button>
+        <a href="get-started.html" class="header-cta-button">GET STARTED</a>
         <div class="header-separator"></div>
+        <div class="header-subheading">
+          Turn Your Industrial Edge into AI Advantage - Built for industrial engineering & manufacturing firms, advanced manufacturing companies, fabrication & machining shops, machine builders (OEM), contract manufacturers, systems integrators, and hardtech companies.
+        </div>
       </div>
 
       <!-- First Content Section -->
@@ -407,7 +435,7 @@
 
       <!-- Call to Action Section -->
       <div class="cta-section">
-        <button class="cta-button">GET STARTED</button>
+        <a href="get-started.html" class="cta-button">GET STARTED</a>
       </div>
     </div>
 

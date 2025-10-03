@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Get Started - Toronto Innovation Lab</title>
+    <link rel="icon" type="image/png" href="favicon/favicon-logo.png">
+    <link rel="shortcut icon" type="image/png" href="favicon/favicon-logo.png">
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/12.3.0/firebase-app-compat.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/12.3.0/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/12.3.0/firebase-database-compat.js"></script>
+    <script defer src="/__/firebase/12.3.0/firebase-firestore-compat.js"></script>
+    <script defer src="/__/firebase/12.3.0/firebase-functions-compat.js"></script>
+    <script defer src="/__/firebase/12.3.0/firebase-messaging-compat.js"></script>
+    <script defer src="/__/firebase/12.3.0/firebase-storage-compat.js"></script>
+    <script defer src="/__/firebase/12.3.0/firebase-analytics-compat.js"></script>
+    <script defer src="/__/firebase/12.3.0/firebase-remote-config-compat.js"></script>
+    <script defer src="/__/firebase/12.3.0/firebase-performance-compat.js"></script>
+    <!-- 
+      initialize the SDK after all desired features are loaded, set useEmulator to false
+      to avoid connecting the SDK to running emulators.
+    -->
+    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+
+    <style media="screen">
+      @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+      
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body { 
+        background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
+        color: #1a1a1a; 
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        margin: 0; 
+        padding: 0; 
+        line-height: 1.5;
+        font-weight: 400;
+        min-height: 100vh;
+      }
+      
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 60px 40px;
+      }
+      
+      .header {
+        text-align: center;
+        margin-bottom: 60px;
+      }
+      
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        color: #666;
+        text-decoration: none;
+        font-size: 14px;
+        margin-bottom: 40px;
+        transition: color 0.3s ease;
+      }
+      
+      .back-link:hover {
+        color: #000;
+      }
+      
+      .back-link::before {
+        content: '←';
+        margin-right: 8px;
+        font-size: 16px;
+      }
+      
+      .main-title {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 42px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        letter-spacing: 2px;
+        background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      
+      .subtitle {
+        font-size: 18px;
+        color: #666;
+        margin-bottom: 40px;
+        font-style: italic;
+      }
+      
+      .form-container {
+        background: white;
+        border-radius: 16px;
+        padding: 40px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+        border: 1px solid rgba(0,0,0,0.05);
+      }
+      
+      .form-group {
+        margin-bottom: 30px;
+      }
+      
+      .form-group label {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        color: #2a2a2a;
+        margin-bottom: 8px;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+      }
+      
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 16px 20px;
+        border: 2px solid #e5e5e5;
+        border-radius: 8px;
+        font-size: 16px;
+        font-family: 'Inter', sans-serif;
+        background: #fafafa;
+        transition: all 0.3s ease;
+        color: #1a1a1a;
+      }
+      
+      .form-group input:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: #1a1a1a;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(26,26,26,0.1);
+      }
+      
+      .form-group textarea {
+        min-height: 120px;
+        resize: vertical;
+      }
+      
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      
+      .submit-button {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+        color: #ffffff;
+        padding: 20px 60px;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        cursor: pointer;
+        font-family: 'JetBrains Mono', monospace;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        margin-top: 20px;
+      }
+      
+      .submit-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+        transition: left 0.5s ease;
+      }
+      
+      .submit-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+        background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
+      }
+      
+      .submit-button:hover::before {
+        left: 100%;
+      }
+      
+      .submit-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+      
+      .success-message {
+        background: #f0f9ff;
+        border: 1px solid #0ea5e9;
+        color: #0c4a6e;
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 20px;
+        text-align: center;
+        font-weight: 500;
+        display: none;
+      }
+      
+      .error-message {
+        background: #fef2f2;
+        border: 1px solid #f87171;
+        color: #dc2626;
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 20px;
+        text-align: center;
+        font-weight: 500;
+        display: none;
+      }
+      
+      @media (max-width: 768px) {
+        .container {
+          padding: 40px 20px;
+        }
+        
+        .main-title {
+          font-size: 32px;
+        }
+        
+        .form-container {
+          padding: 30px 20px;
+        }
+        
+        .form-row {
+          grid-template-columns: 1fr;
+          gap: 0;
+        }
+        
+        .submit-button {
+          padding: 18px 40px;
+          font-size: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <a href="index.html" class="back-link">Back to Home</a>
+        <h1 class="main-title">GET STARTED</h1>
+        <p class="subtitle">Let's turn your industrial expertise into AI advantage</p>
+      </div>
+
+      <div class="form-container">
+        <form id="leadForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="companyName">Company Name *</label>
+              <input type="text" id="companyName" name="companyName" required>
+            </div>
+            <div class="form-group">
+              <label for="industry">Industry *</label>
+              <select id="industry" name="industry" required>
+                <option value="">Select Industry</option>
+                <option value="manufacturing">Manufacturing</option>
+                <option value="industrial-engineering">Industrial Engineering</option>
+                <option value="fabrication-machining">Fabrication & Machining</option>
+                <option value="machine-building">Machine Building (OEM)</option>
+                <option value="contract-manufacturing">Contract Manufacturing</option>
+                <option value="systems-integration">Systems Integration</option>
+                <option value="hardtech">Hardtech</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="contactName">Contact Name *</label>
+              <input type="text" id="contactName" name="contactName" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address *</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" name="phone">
+            </div>
+            <div class="form-group">
+              <label for="companySize">Company Size</label>
+              <select id="companySize" name="companySize">
+                <option value="">Select Size</option>
+                <option value="1-10">1-10 employees</option>
+                <option value="11-50">11-50 employees</option>
+                <option value="51-200">51-200 employees</option>
+                <option value="201-500">201-500 employees</option>
+                <option value="500+">500+ employees</option>
+              </select>
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <label for="goals">AI Goals & Objectives</label>
+            <textarea id="goals" name="goals" placeholder="What are your main goals for implementing AI in your operations? What specific outcomes are you looking to achieve?"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="timeline">Implementation Timeline</label>
+            <select id="timeline" name="timeline">
+              <option value="">Select Timeline</option>
+              <option value="immediate">Immediate (0-3 months)</option>
+              <option value="short-term">Short-term (3-6 months)</option>
+              <option value="medium-term">Medium-term (6-12 months)</option>
+              <option value="long-term">Long-term (12+ months)</option>
+              <option value="exploring">Just exploring options</option>
+            </select>
+          </div>
+
+          <button type="submit" class="submit-button" id="submitBtn">
+            Submit Application
+          </button>
+
+          <div class="success-message" id="successMessage">
+            Thank you! Your application has been submitted successfully. We'll be in touch within 24 hours.
+          </div>
+
+          <div class="error-message" id="errorMessage">
+            There was an error submitting your application. Please try again or contact us directly.
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('leadForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
+
+        form.addEventListener('submit', async function(e) {
+          e.preventDefault();
+          
+          // Show loading state
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Submitting...';
+          successMessage.style.display = 'none';
+          errorMessage.style.display = 'none';
+
+          try {
+            // Get form data
+            const formData = new FormData(form);
+            const leadData = {
+              companyName: formData.get('companyName'),
+              industry: formData.get('industry'),
+              contactName: formData.get('contactName'),
+              email: formData.get('email'),
+              phone: formData.get('phone') || '',
+              companySize: formData.get('companySize') || '',
+              goals: formData.get('goals') || '',
+              timeline: formData.get('timeline') || '',
+              submittedAt: new Date(),
+              status: 'new'
+            };
+
+            // Save to Firestore
+            await firebase.firestore().collection('leads').add(leadData);
+
+            // Show success message
+            successMessage.style.display = 'block';
+            form.reset();
+            
+            // Scroll to success message
+            successMessage.scrollIntoView({ behavior: 'smooth' });
+
+          } catch (error) {
+            console.error('Error submitting form:', error);
+            errorMessage.style.display = 'block';
+            errorMessage.scrollIntoView({ behavior: 'smooth' });
+          } finally {
+            // Reset button state
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Submit Application';
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

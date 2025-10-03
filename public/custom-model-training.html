@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Custom Model Training — Toronto Innovation Lab</title>
+    <meta name="description" content="Train private, task‑specific AI models on your own operations using RLHF, objective‑driven optimization, and rigorous evaluation. You keep the IP." />
+
+    <link rel="icon" type="image/png" href="favicon/favicon-logo.png" />
+    <link rel="shortcut icon" type="image/png" href="favicon/favicon-logo.png" />
+
+    <!-- Social sharing -->
+    <meta property="og:title" content="Custom Model Training — Toronto Innovation Lab" />
+    <meta property="og:description" content="Industrial‑first custom model training with expert feedback, SOP‑aligned objectives, and on‑prem/VPC deployment." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="images/Imag3-factory-ai.png" />
+
+    <!-- performance: font preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Firebase (match site setup) -->
+    <script defer src="/__/firebase/12.3.0/firebase-app-compat.js"></script>
+    <script defer src="/__/firebase/12.3.0/firebase-analytics-compat.js"></script>
+    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%); color: #1a1a1a; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.5; }
+      .container { max-width: 1400px; margin: 0 auto; padding: 60px 40px; }
+
+      /* Header / hero */
+      .header { text-align: center; margin-bottom: 40px; display: flex; flex-direction: column; align-items: center; }
+      .main-title { font-family: 'JetBrains Mono', monospace; font-size: 44px; font-weight: 700; letter-spacing: 3px; background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+      .header-subheading { font-size: 14px; color: #999; margin-top: 16px; max-width: 900px; font-style: italic; }
+      .header-separator { width: 100%; height: 1px; background: linear-gradient(90deg, transparent 0%, #ddd 20%, #999 50%, #ddd 80%, transparent 100%); margin: 30px 0 10px; }
+
+      /* Primary nav */
+      .nav-links { display: flex; justify-content: center; gap: 40px; margin-bottom: 24px; padding: 10px 0; }
+      .nav-link { font-family: 'JetBrains Mono', monospace; font-size: 13px; text-decoration: none; color: #2a2a2a; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; position: relative; transition: all 0.3s ease; padding: 8px 12px; border-radius: 4px; }
+      .nav-link:hover { color: #000; background: rgba(0,0,0,0.05); transform: translateY(-1px); }
+      .nav-link.active { color: #000; background: rgba(0,0,0,0.08); }
+
+      /* Sticky subnav */
+      .subnav { position: sticky; top: 0; z-index: 9; background: rgba(255,255,255,0.85); backdrop-filter: blur(6px); border-bottom: 1px solid rgba(0,0,0,0.06); }
+      .subnav-inner { max-width: 1100px; margin: 0 auto; display: flex; gap: 20px; overflow-x: auto; padding: 12px 10px; }
+      .subnav a { white-space: nowrap; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 1.5px; color: #333; text-decoration: none; padding: 6px 10px; border-radius: 6px; transition: background 0.2s ease; }
+      .subnav a:hover { background: rgba(0,0,0,0.06); }
+
+      /* Sections */
+      .content-section { display: flex; align-items: flex-start; gap: 40px; margin-bottom: 60px; padding: 40px 0; border-bottom: 1px solid rgba(0,0,0,0.08); position: relative; }
+      .content-section:last-of-type { border-bottom: none; }
+      .content-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.1) 50%, transparent 100%); }
+      .section-image { width: 320px; height: 320px; object-fit: contain; flex-shrink: 0; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; background: #fafafa; padding: 20px; }
+      .section-image:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.12); }
+      .section-text { flex: 1; font-size: 18px; line-height: 1.7; font-weight: 500; letter-spacing: 0.3px; color: #2a2a2a; }
+      .section-text h2 { font-family: 'JetBrains Mono', monospace; letter-spacing: 2px; font-size: 22px; margin-bottom: 10px; }
+      .section-subtitle { font-size: 16px; line-height: 1.6; font-weight: 400; letter-spacing: 0.2px; color: #666; margin-top: 12px; font-style: italic; }
+
+      /* Grids & cards */
+      .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+      .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+      .card { background: #fff; border: 1px solid rgba(0,0,0,0.06); border-radius: 12px; padding: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+      .card h3 { font-family: 'JetBrains Mono', monospace; font-size: 16px; letter-spacing: 1.2px; margin-bottom: 8px; }
+      .muted { color: #666; font-size: 14px; }
+      ul.checks { list-style: none; margin-top: 8px; }
+      ul.checks li { padding-left: 22px; position: relative; margin: 8px 0; }
+      ul.checks li::before { content: '✔'; position: absolute; left: 0; top: 0; font-size: 14px; }
+
+      /* CTA */
+      .cta-section { text-align: center; margin: 60px 0 20px; }
+      .cta-button { background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%); color: #ffffff; padding: 18px 48px; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; letter-spacing: 2px; cursor: pointer; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; transition: all 0.3s ease; box-shadow: 0 8px 24px rgba(0,0,0,0.15); position: relative; overflow: hidden; text-decoration: none; display: inline-block; }
+      .cta-button::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); transition: left 0.5s ease; }
+      .cta-button:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,0,0,0.2); background: linear-gradient(135deg, #000 0%, #1a1a1a 100%); }
+      .cta-button:hover::before { left: 100%; }
+
+      /* Responsive */
+      @media (max-width: 1200px) { .grid-4 { grid-template-columns: repeat(3, 1fr); } }
+      @media (max-width: 1024px) { .grid-3 { grid-template-columns: repeat(2, 1fr); } }
+      @media (max-width: 768px) {
+        .container { padding: 40px 20px; }
+        .main-title { font-size: 32px; }
+        .nav-links { flex-direction: column; gap: 12px; }
+        .content-section { flex-direction: column; gap: 20px; text-align: center; }
+        .section-image { width: 260px; height: 260px; margin: 0 auto; }
+        .grid-4 { grid-template-columns: 1fr; }
+        .grid-3 { grid-template-columns: 1fr; }
+        .grid-2 { grid-template-columns: 1fr; }
+      }
+
+      @media (prefers-reduced-motion: reduce) { .cta-button, .section-image { transition: none; } }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="header" role="banner">
+        <h1 class="main-title">CUSTOM MODEL TRAINING</h1>
+        <nav class="nav-links" aria-label="Primary">
+          <a href="ai-training-consulting.html" class="nav-link" data-track="nav_consulting">AI TRAINING CONSULTING</a>
+          <a href="custom-data-labelling.html" class="nav-link" data-track="nav_labelling">CUSTOM DATA LABELLING</a>
+          <a href="#" class="nav-link active" data-track="nav_training">CUSTOM MODEL TRAINING</a>
+        </nav>
+        <div class="header-separator" aria-hidden="true"></div>
+        <p class="header-subheading">Train private, task‑specific models on your operations. We combine supervised fine‑tuning and RLHF with SOP‑aligned objective functions—then deploy on‑prem or in your VPC. <strong>You keep the IP.</strong></p>
+      </header>
+
+      <!-- Sticky subnav -->
+      <div class="subnav" role="navigation" aria-label="Section">
+        <div class="subnav-inner">
+          <a href="#overview">Overview</a>
+          <a href="#model-types">Model Types</a>
+          <a href="#objectives">Objectives & Data</a>
+          <a href="#workflow">Training Workflow</a>
+          <a href="#evaluation">Evaluation & Benchmarks</a>
+          <a href="#deployment">Deployment & Runtime</a>
+          <a href="#mlops">MLOps & Monitoring</a>
+          <a href="#deliverables">Deliverables</a>
+          <a href="#security">Security & IP</a>
+          <a href="#faq">FAQ</a>
+          <a href="#contact">Get Started</a>
+        </div>
+      </div>
+
+      <main>
+        <!-- Overview -->
+        <section id="overview" class="content-section" aria-labelledby="headline-overview">
+          <div class="section-text">
+            <h2 id="headline-overview">Industrial‑first training grounded in outcomes</h2>
+            <p class="section-subtitle">We optimize models toward what matters: fewer interventions, higher first‑pass yield, safer operations, and faster onboarding.</p>
+            <div class="grid-3" style="margin-top:16px;">
+              <div class="card"><h3>Objective‑driven</h3><p class="muted">Define measurable “good” via SOPs + signals (interventions, pass/fail, cycle time).</p></div>
+              <div class="card"><h3>Expert feedback</h3><p class="muted">Use supervisor comments and labeled moments to guide training (RLHF where useful).</p></div>
+              <div class="card"><h3>Private by design</h3><p class="muted">On‑prem/VPC options and models that remain your IP—no cross‑customer training.</p></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Model Types -->
+        <section id="model-types" class="content-section" aria-labelledby="headline-model-types">
+          <div class="section-text">
+            <h2 id="headline-model-types">Model types we train</h2>
+            <div class="grid-4" style="margin-top:12px;">
+              <div class="card"><h3>Vision (images/video)</h3><p class="muted">Defect detection, assembly verification, PPE/compliance checks, surface inspection.</p></div>
+              <div class="card"><h3>Temporal / sequence</h3><p class="muted">Step ordering, anomaly/event prediction, near‑miss windows.</p></div>
+              <div class="card"><h3>Multimodal</h3><p class="muted">Fuse video + audio + machine logs + transcripts for richer context.</p></div>
+              <div class="card"><h3>Instruction‑tuned</h3><p class="muted">SOP‑aware assistants for setup, troubleshooting, and training snippets.</p></div>
+              <div class="card"><h3>Retrieval‑augmented</h3><p class="muted">Connect models to SOPs, manuals, and prior incidents for grounded answers.</p></div>
+              <div class="card"><h3>Anomaly detection</h3><p class="muted">Unsupervised/semi‑supervised for rare defects and process drift.</p></div>
+              <div class="card"><h3>Time‑series</h3><p class="muted">Predictive maintenance and quality using sensor streams.</p></div>
+              <div class="card"><h3>Edge‑optimized</h3><p class="muted">Quantized/pruned models for low‑latency on cameras and IPCs.</p></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Objectives & Data -->
+        <section id="objectives" class="content-section" aria-labelledby="headline-objectives">
+          <div class="section-text">
+            <h2 id="headline-objectives">Objectives & data sources</h2>
+            <div class="grid-3" style="margin-top:12px;">
+              <div class="card"><h3>Objective functions</h3><p class="muted">Train toward disengagements avoided, defects caught, cycle‑time adherence, and safe‑state compliance.</p></div>
+              <div class="card"><h3>Ground truth</h3><p class="muted">Use SOP‑aligned labels, gold sets, and pass/fail outcomes to anchor training.</p></div>
+              <div class="card"><h3>Signals</h3><p class="muted">Video frames, transcripts, sensor logs, operator comments, and machine states.</p></div>
+            </div>
+            <p class="section-subtitle">When uncertainty is high, we escalate to humans; those decisions become new training data.</p>
+          </div>
+        </section>
+
+        <!-- Training Workflow -->
+        <section id="workflow" class="content-section" aria-labelledby="headline-workflow">
+          <div class="section-text">
+            <h2 id="headline-workflow">Training workflow</h2>
+            <div class="grid-2" style="margin-top:12px;">
+              <div class="card"><h3>1) Data curation</h3><p class="muted">Balance classes and edge cases; dedupe, stratify, and augment responsibly.</p></div>
+              <div class="card"><h3>2) Supervised fine‑tuning</h3><p class="muted">Start from strong baselines; adapt to your tasks with your labeled data.</p></div>
+              <div class="card"><h3>3) RLHF (where applicable)</h3><p class="muted">Use expert preferences to refine outputs toward your operational goals.</p></div>
+              <div class="card"><h3>4) Evaluation harness</h3><p class="muted">Offline metrics (mAP/F1/AUROC), task checks, and error buckets.</p></div>
+              <div class="card"><h3>5) Red‑team & safety</h3><p class="muted">Probe failure modes; set thresholds, guardrails, and human‑in‑the‑loop triggers.</p></div>
+              <div class="card"><h3>6) Packaging</h3><p class="muted">Containerized runtimes, quantization/compilation for edge, and SDKs.</p></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Evaluation & Benchmarks -->
+        <section id="evaluation" class="content-section" aria-labelledby="headline-eval">
+          <div class="section-text">
+            <h2 id="headline-eval">Evaluation & benchmarks</h2>
+            <div class="grid-3" style="margin-top:12px;">
+              <div class="card"><h3>Offline metrics</h3><p class="muted">Precision/recall, F1, mAP, AUROC; per‑class and per‑scenario breakdowns.</p></div>
+              <div class="card"><h3>Task checks</h3><p class="muted">Step‑order compliance, false‑stop cost, and near‑miss detection quality.</p></div>
+              <div class="card"><h3>Online metrics</h3><p class="muted">Intervention rate, first‑pass yield, cycle‑time adherence, MTTR.</p></div>
+            </div>
+            <p class="section-subtitle">We report baselines vs. pilot models and highlight trade‑offs so you can choose thresholds that fit risk and throughput.</p>
+          </div>
+        </section>
+
+        <!-- Deployment & Runtime -->
+        <section id="deployment" class="content-section" aria-labelledby="headline-deploy">
+          <div class="section-text">
+            <h2 id="headline-deploy">Deployment & runtime</h2>
+            <div class="grid-3" style="margin-top:12px;">
+              <div class="card"><h3>On‑prem / VPC</h3><p class="muted">Air‑gapped or private cloud; models and data remain within your boundary.</p></div>
+              <div class="card"><h3>Edge</h3><p class="muted">Low‑latency inference on cameras/IPCs; quantization and compilation for target hardware.</p></div>
+              <div class="card"><h3>APIs & SDK</h3><p class="muted">gRPC/REST with client SDKs; batching and streaming for video.</p></div>
+            </div>
+            <p class="section-subtitle">We document latency budgets and throughput expectations for each runtime.</p>
+          </div>
+        </section>
+
+        <!-- MLOps & Monitoring -->
+        <section id="mlops" class="content-section" aria-labelledby="headline-mlops">
+          <div class="section-text">
+            <h2 id="headline-mlops">MLOps & monitoring</h2>
+            <div class="grid-3" style="margin-top:12px;">
+              <div class="card"><h3>Versioning</h3><p class="muted">Datasets, models, and configs are tracked with changelogs.</p></div>
+              <div class="card"><h3>Drift & alerts</h3><p class="muted">Detect distribution shifts; route uncertain cases to humans.</p></div>
+              <div class="card"><h3>Continuous improvement</h3><p class="muted">Close the loop with new labels; scheduled retraining windows.</p></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Deliverables -->
+        <section id="deliverables" class="content-section" aria-labelledby="headline-deliverables">
+          <div class="section-text">
+            <h2 id="headline-deliverables">What you get</h2>
+            <div class="grid-3" style="margin-top:12px;">
+              <div class="card"><h3>Model artifacts</h3><p class="muted">Weights, configs, and inference containers; edge builds when needed.</p></div>
+              <div class="card"><h3>Evaluation report</h3><p class="muted">Baselines vs. pilot; confusion matrices, error buckets, and thresholds.</p></div>
+              <div class="card"><h3>Runtime & SDK</h3><p class="muted">Docs and client libs for deployment; example pipelines.</p></div>
+              <div class="card"><h3>Playbooks</h3><p class="muted">SOP updates, escalation rules, and human‑in‑the‑loop guidance.</p></div>
+              <div class="card"><h3>Rollout plan</h3><p class="muted">Pilot → adjacent workflows → multi‑site scaling.</p></div>
+              <div class="card"><h3>IP terms</h3><p class="muted">Your data and trained models remain <strong>your IP</strong>.</p></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Security & IP -->
+        <section id="security" class="content-section" aria-labelledby="headline-security">
+          <div class="section-text">
+            <h2 id="headline-security">Security & IP</h2>
+            <ul class="checks">
+              <li>On‑prem or private VPC deployments with least‑privilege access.</li>
+              <li>Configurable retention; privacy zones and redaction for video.</li>
+              <li>No cross‑customer training; models remain your intellectual property.</li>
+            </ul>
+            <p class="section-subtitle">We map controls to your policies and industry standards during onboarding.</p>
+          </div>
+        </section>
+
+        <!-- FAQ -->
+        <section id="faq" class="content-section" aria-labelledby="headline-faq">
+          <div class="section-text">
+            <h2 id="headline-faq">FAQ</h2>
+            <details>
+              <summary>Which models do you start from?</summary>
+              <p>We begin with strong open/commercial baselines appropriate for your task and constraints, then fine‑tune to your data and objectives.</p>
+            </details>
+            <details>
+              <summary>Do we need GPUs on‑site?</summary>
+              <p>Not for pilots. Training can run in a secure cloud/VPC; inference can run on edge devices or on‑prem servers.</p>
+            </details>
+            <details>
+              <summary>How do you handle rare edge cases?</summary>
+              <p>We upsample/target them during curation and route uncertain production cases to human review to create new labeled data.</p>
+            </details>
+            <details>
+              <summary>What’s the fastest path to value?</summary>
+              <p>Pick one workflow, ship an initial model in 2–4 weeks, and track 2–3 operational metrics (e.g., intervention rate, FPY).</p>
+            </details>
+          </div>
+        </section>
+
+        <!-- CTA -->
+        <section id="contact" class="cta-section" aria-label="Call to action">
+          <a href="get-started.html" class="cta-button" data-track="cta_training_get_started">Book Free Consultation</a>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        try {
+          const app = firebase.app();
+          const analytics = firebase.analytics ? firebase.analytics() : null;
+
+          // Smooth scroll for subnav
+          document.querySelectorAll('.subnav a[href^="#"]').forEach((link) => {
+            link.addEventListener('click', (e) => {
+              const id = link.getAttribute('href').slice(1);
+              const el = document.getElementById(id);
+              if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+            });
+          });
+
+          // Basic click tracking
+          document.querySelectorAll('[data-track]').forEach((el) => {
+            el.addEventListener('click', () => {
+              const id = el.getAttribute('data-track');
+              if (analytics && typeof analytics.logEvent === 'function') analytics.logEvent('ui_click', { id });
+              else console.log('track', id);
+            });
+          });
+        } catch (e) {
+          console.warn('Firebase not available:', e);
+        }
+      });
+    </script>
+  </body>
+</html>
