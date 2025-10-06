@@ -321,6 +321,48 @@
         transform: translateY(0);
       }
       
+      .video-section {
+        text-align: center;
+        margin-top: 80px;
+        padding: 60px 0;
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+      }
+      
+      .video-title {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        margin-bottom: 20px;
+        color: #1a1a1a;
+      }
+      
+      .video-description {
+        font-size: 18px;
+        line-height: 1.7;
+        color: #2a2a2a;
+        margin-bottom: 40px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      
+      .video-container {
+        max-width: 800px;
+        margin: 0 auto;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+      }
+      
+      .video-container video {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+      
       @media (max-width: 768px) {
         .container {
           padding: 40px 20px;
@@ -380,6 +422,20 @@
           padding: 20px 60px;
           font-size: 14px;
         }
+        
+        .video-section {
+          margin-top: 60px;
+          padding: 40px 20px;
+        }
+        
+        .video-title {
+          font-size: 24px;
+        }
+        
+        .video-description {
+          font-size: 16px;
+          margin-bottom: 30px;
+        }
       }
     </style>
   </head>
@@ -437,6 +493,25 @@
       <!-- Call to Action Section -->
       <div class="cta-section">
         <a href="get-started.html" class="cta-button">GET STARTED</a>
+      </div>
+
+      <!-- Video Section -->
+      <div class="video-section">
+        <h2 class="video-title">SEE AI IN ACTION</h2>
+        <p class="video-description">
+          Watch how our AI systems transform industrial operations into intelligent, data-driven processes. 
+          This demonstration showcases the power of custom AI models trained on your specific operations, 
+          capturing critical moments and turning them into actionable insights that drive real business value.
+        </p>
+        <div class="video-container">
+          <video controls poster="" preload="metadata">
+            <source src="video/data-system.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <div style="margin-top: 40px;">
+          <a href="get-started.html" class="cta-button">START NOW</a>
+        </div>
       </div>
     </div>
 
